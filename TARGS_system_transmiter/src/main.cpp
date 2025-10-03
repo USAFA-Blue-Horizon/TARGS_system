@@ -1,18 +1,40 @@
 #include <Arduino.h>
+#include <radio.h>
+#include <params.h>
 
-// put function declarations here:
-int myFunction(int, int);
+RH_RF95* radio = new RH_RF95(RFM95_CS, RFM95_INT);
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+void setup()
+{ 
+    Serial.begin(9600);
+    while (!Serial) 
+        ;
+    delay(100); // Wait a bit for serial to initialize
+
+    if (!initializeCommunication(radio)) {
+        Serial.println("Radio initialization failed. Check connections.");
+        while (1);
+    }
+    Serial.println("Setup complete.");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop()//loop to send serial inputs commands of string over radio so transmit every user serial line
+{
+    if (Serial.available()) {
+        String input = Serial.readStringUntil('\n');
+        input.trim(); // Remove any leading/trailing whitespace
+        if (input.length() > 0) {
+            sendStringData(radio, input);
+            Serial.print("Sent over LoRa: ");
+            Serial.println(input);
+        }
+    }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    String command = checkForCommands(radio);
+    if (command.length() > 0) {
+        Serial.print("Received command: ");
+        Serial.println(command);
+    }
+
+    delay(100); // Adjust delay as needed
 }
