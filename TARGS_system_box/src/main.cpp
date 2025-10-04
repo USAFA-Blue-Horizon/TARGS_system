@@ -77,6 +77,10 @@ void loop() {
         systemState = UNARMED;
         Serial.println("System disarmed");
         sendData(radio, 0.0, continuity, systemState, "System disarmed");
+        Fuel_Servo.write(0); // set servo to 0 degrees
+        Ox_Servo.write(0); // set servo to 0 degrees
+        Ox_load.write(0); // set servo to 0 degrees
+        CO2_Servo.write(0); // set servo to 0 degrees
       }
       else if (systemState == ARMED && command == "LOAD") {
         systemState = LOADING;
@@ -94,11 +98,13 @@ void loop() {
         systemState = FIRE;
         Serial.println("Firing sequence initiated...");
         triggerFire();
-        Fuel_Servo.write(0); // set servo to 0 degrees
-        Ox_Servo.write(0); // set servo to 0 degrees
-        delay(2000); // wait for 2 seconds
+        Fuel_Servo.write(90); // set servo to 90 degrees
+        Ox_Servo.write(90); // set servo to 90 degrees
+        delay(10000); // wait for 2 seconds
         Serial.println("Servos fired");
         sendData(radio, 0.0, 0.0, systemState, "Servos & pyro fired");
+        Fuel_Servo.write(0); // set servo to 0 degrees
+        Ox_Servo.write(0); // set servo to 0 degrees
       }
       else if (systemState == FIRE && command == "PURGE") {
         Serial.println("CO2 Purge sequence initiated...");
