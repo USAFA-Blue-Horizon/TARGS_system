@@ -16,6 +16,8 @@ void setup()
         while (1);
     }
     Serial.println("Setup complete.");
+
+    pinMode(8, OUTPUT);
 }
 
 void loop()//loop to send serial inputs commands of string over radio so transmit every user serial line
@@ -32,9 +34,8 @@ void loop()//loop to send serial inputs commands of string over radio so transmi
 
     String command = checkForCommands(radio);
     if (command.length() > 0) {
-        Serial.print("Received command: ");
         Serial.println(command);
     }
 
-    delay(100); // Adjust delay as needed
+
 }

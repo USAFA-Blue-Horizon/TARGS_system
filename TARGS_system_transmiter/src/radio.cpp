@@ -35,7 +35,7 @@ String checkForCommands(RH_RF95* rf95) {
             String receivedCommand = String((char*)buf); 
             receivedCommand.trim(); // Remove any leading/trailing whitespace
             
-            Serial.print("LoRa received: "); 
+             
             Serial.println(receivedCommand);
             
             command = receivedCommand;

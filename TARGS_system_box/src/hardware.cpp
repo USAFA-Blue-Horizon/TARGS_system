@@ -49,24 +49,33 @@ void initializeHardware(bool& separationTriggered, bool& launchTriggered) {
 void checkPyroContinuity(double* continuity) {
     continuity[0] = 0.0;
     int pyro1Value = analogRead(LAUNCH_PYRO_CONT); // Read analog value from pyro 1 continuity pin
+    int pyro2Value = analogRead(SEP_PYRO_CONT); // Read analog value from pyro 2 continuity pin
 
-    if (pyro1Value > CONTINUITY_THRESHOLD * (3.3 / 1023)) { //   3.3/1023 is the conversion factor for 10 bit ADC on teensy (0-1023 to 0-3.3V)
-        continuity[0] = 1.0;
+    if (pyro1Value > CONTINUITY_THRESHOLD * (3.3 / 1023) && pyro2Value > CONTINUITY_THRESHOLD * (3.3 / 1023)) {
+        continuity[0] = 2.0; // Both pyros have continuity
     }
-
+    else if (pyro1Value > CONTINUITY_THRESHOLD * (3.3 / 1023)) { //   3.3/1023 is the conversion factor for 10 bit ADC on teensy (0-1023 to 0-3.3V)
+        continuity[0] = 1.0; // Only pyro1 has continuity
+    }
+    else if (pyro2Value > CONTINUITY_THRESHOLD * (3.3 / 1023)) {
+        continuity[0] = 3.0; // Only pyro2 has continuity
+    }
 }
 
 
 void triggerFire() {
 
     digitalWrite(LAUNCH_PYRO_FIRE, HIGH); // Fire pyro
+    digitalWrite(SEP_PYRO_FIRE, HIGH);
     
-    unsigned long launchStartTime = millis(); // Start timer for launch
+}
 
-        
-    if ((millis() - launchStartTime >= PYRO_DURATION)) {
-        digitalWrite(LAUNCH_PYRO_FIRE, LOW);
-    }
+void checkPT(double* pt) {
+    pinMode(27, INPUT); // PT sensor pin
+    float ptValue = analogRead(27) * (3.3 / 1023);
+    float val = map(ptValue, 0.3, 3.2, 0, 1600); // Convert to millivolts (0-3.3V range)
+
+    pt[0] = val; // Return pressure value in psi
 
 }
 

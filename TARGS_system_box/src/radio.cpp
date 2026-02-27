@@ -49,7 +49,7 @@ void sendData(RH_RF95* rf95, double pt, double continuity1, int state, String ex
     // Create a buffer to hold the data
     uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     // Format the data into a string
-    int len = snprintf((char*)buf, sizeof(buf), "PT:%.2f,\nC1:%.2f,\nState:%d,\nStatus:%s", pt, continuity1, state, extraInfo.c_str());
+    int len = snprintf((char*)buf, sizeof(buf), "#PT:%.2f,\nC1:%.2f,\nState:%d,\nStatus:%s", pt, continuity1, state, extraInfo.c_str());
     // Send the data
     if (len > 0 && len < sizeof(buf)) {
         rf95->send(buf, len);

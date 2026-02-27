@@ -44,6 +44,8 @@ void checkPyroContinuity(double* continuity);
  */
 void triggerFire();
 
+void checkPT(double* pt);
+
 void countDownMusic();
 
 

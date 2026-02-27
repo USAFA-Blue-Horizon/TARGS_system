@@ -12,6 +12,9 @@
 #define PYRO_DURATION 2000  // 2 seconds
 #define CONTINUITY_THRESHOLD 2 // Threshold for continuity detection (in volts)
 
+//PT
+#define PT_SENSOR A13
+
 // LED Configuration
 #define NUM_LEDS 2
 #define LED_DATA_PIN 3
@@ -33,7 +36,8 @@ enum SystemState {
     LOADING,
     LOADED,
     FIRE,
-    CO2PURGE
+    PURGE,
+    PURGED
 };
 
 #define CO2PURGE 5
